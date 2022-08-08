@@ -3,7 +3,7 @@ from sign import get_signed_headers
 
 
 def lambda_handler(event, context):
-
+    # From CodePipeline
     # ************* BUILD ENDPOINT AND PAYLOAD *************
     qs_params = event.get('queryStringParameters') or {}
     es_label = qs_params.get('q', '')

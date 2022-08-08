@@ -3,4 +3,6 @@ version: 0.2
 
 artifacts:
   files:
-    - lambdas/lf2-search/**/*
+    - '**/*'
+  base-directory: lambdas/lf2-search
+  

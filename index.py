@@ -4,8 +4,7 @@ from sign import get_signed_headers
 
 def lambda_handler(event, context):
     # From CodePipeline
-    # Testing the webhook filter
-    # Testing the webhook filter again
+    # Testing the webhook filter, separate repo
     # ************* BUILD ENDPOINT AND PAYLOAD *************
     qs_params = event.get('queryStringParameters') or {}
     es_label = qs_params.get('q', '')

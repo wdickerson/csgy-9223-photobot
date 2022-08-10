@@ -2,7 +2,8 @@ from index import lambda_handler
 
 my_event = {
     "queryStringParameters": {
-        "q": "bulldog"
+        # "q": "hi"
+        "q": "show me ice cream and bulldoggs"
     }
 }
 

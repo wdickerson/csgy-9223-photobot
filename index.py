@@ -1,18 +1,50 @@
-import json, os, requests
+import boto3, json, os, requests
 from sign import get_signed_headers
+
+lex_client = boto3.client('lexv2-runtime')
 
 
 def lambda_handler(event, context):
-    # From CodePipeline
-    # Testing the webhook filter, separate repo
     # ************* BUILD ENDPOINT AND PAYLOAD *************
     qs_params = event.get('queryStringParameters') or {}
-    es_label = qs_params.get('q', '')
+    user_input = qs_params.get('q', '')
+    lex_response = lex_client.recognize_text(
+        botId=os.environ['LEX_BOT_ID'],
+        botAliasId=os.environ['LEX_ALIAS_ID'],
+        localeId='en_US',
+        sessionId='id',
+        text=user_input,
+    )
+
+    interpretations = lex_response['interpretations']
+    interpretation = next(
+        intent for intent in interpretations 
+        if intent['intent']['name'] == 'SearchIntent'
+    )
+    intent = interpretation['intent']
+    slot = intent.get('slots', {}).get('label', None)
+
+    if slot is None:
+        print('HERE!!! need to return')
+        # TODO: return
+    
+    resolved_labels = [
+        (
+            value['value']['resolvedValues'][0] 
+            if len(value['value']['resolvedValues']) > 0
+            else value['value']['interpretedValue']
+        )
+        for value in (slot or {}).get('values', []) or []
+    ]
+
+    print('HERE!!! resolved labels')
+    print(json.dumps(resolved_labels))
+
     payload = {
         "query": {
             "match": {
                 "labels": {
-                    "query": ' '.join([es_label]),
+                    "query": ' '.join(resolved_labels),
                     "fuzziness": "AUTO"
                 }
             }

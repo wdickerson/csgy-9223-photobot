@@ -39,12 +39,15 @@ def lambda_handler(event, context):
 
     print('HERE!!! resolved labels')
     print(json.dumps(resolved_labels))
+    query_text = ' '.join(resolved_labels) if len(resolved_labels) > 0 else user_input
+    print('HERE!!! query_text')
+    print(json.dumps(query_text))
 
     payload = {
         "query": {
             "match": {
                 "labels": {
-                    "query": ' '.join(resolved_labels),
+                    "query": query_text,
                     "fuzziness": "AUTO"
                 }
             }

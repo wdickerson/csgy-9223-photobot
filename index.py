@@ -23,10 +23,6 @@ def lambda_handler(event, context):
     )
     intent = interpretation['intent']
     slot = intent.get('slots', {}).get('label', None)
-
-    if slot is None:
-        print('HERE!!! need to return')
-        # TODO: return
     
     resolved_labels = [
         (
@@ -77,10 +73,12 @@ def lambda_handler(event, context):
             "body": json.dumps([]),
         }
 
-    response_body = [{
-        "url": f"https://{os.environ['S3_BUCKET_ENDPOINT']}/{hit.get('_id')}",
-        "labels": hit.get('_source', {}).get('labels', []),
-    } for hit in r.json()['hits']['hits']]
+    response_body = {
+        "results": [{
+            "url": f"https://{os.environ['S3_BUCKET_ENDPOINT']}/{hit.get('_id')}",
+            "labels": hit.get('_source', {}).get('labels', []),
+        } for hit in r.json()['hits']['hits']]
+    }
 
     return {
         "statusCode": 200,

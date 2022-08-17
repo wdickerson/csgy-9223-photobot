@@ -33,10 +33,10 @@ def lambda_handler(event, context):
         for value in (slot or {}).get('values', []) or []
     ]
 
-    print('HERE!!! resolved labels')
+    print('LOG resolved labels:')
     print(json.dumps(resolved_labels))
     query_text = ' '.join(resolved_labels) if len(resolved_labels) > 0 else user_input
-    print('HERE!!! query_text')
+    print('LOG query_text:')
     print(json.dumps(query_text))
 
     payload = {

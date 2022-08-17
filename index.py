@@ -40,6 +40,7 @@ def lambda_handler(event, context):
     print(json.dumps(query_text))
 
     payload = {
+        "size": 25,
         "query": {
             "match": {
                 "labels": {
